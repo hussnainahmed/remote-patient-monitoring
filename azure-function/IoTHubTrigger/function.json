@@ -1,0 +1,14 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "events",
+      "direction": "in",
+      "eventHubName": "iothub-ehub-rpm-pbi-io-4850638-f07b0037e9",
+      "connection": "IoTHubEventHubConnectionString",
+      "cardinality": "many",
+      "consumerGroup": "$Default"
+    }
+  ]
+}

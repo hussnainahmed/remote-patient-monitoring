@@ -24,6 +24,7 @@ from digitalio import Direction
 import adafruit_espatcontrol.adafruit_espatcontrol_socket as socket
 from adafruit_espatcontrol import adafruit_espatcontrol
 import adafruit_requests as requests
+from adafruit_azureiot import IoTCentralDevice
 
 # Get wifi details and more from a secrets.py file
 try:
@@ -57,7 +58,9 @@ esp.hard_reset()
 
 requests.set_socket(socket, esp)
 
-JSON_POST_URL = 'https://shifa-rpm.streamfunctions.io/api/v1/862BV4P65kAaR90LlD18/telemetry'
+#JSON_POST_URL = 'https://shifa-rpm.streamfunctions.io/api/v1/862BV4P65kAaR90LlD18/telemetry'
+
+
 
 
 # PyLint can't find BLERadio for some reason so special case it here.
@@ -88,6 +91,8 @@ while True:
             esp.connect(secrets)
         if pulse_ox_connection and pulse_ox_connection.connected:
             print("Fetch connection")
+            device = IoTCentralDevice(socket,esp,secrets["id_scope"],secrets["device_id"],secrets["key"])
+            device.connect()
             if DeviceInfoService in pulse_ox_connection:
                 dis = pulse_ox_connection[DeviceInfoService]
                 try:
@@ -118,11 +123,13 @@ while True:
                             #print(spo2)
                             #key_to_lookup = 'spo2'
                             #if key_to_lookup in values:
-                            json_data = {"spo2": spo2,"pulse_rate": values.pulse_rate, "finger_present": values.finger_present}
-                            print(json_data)
+                            message = {"spo2": spo2,"pulse_rate": values.pulse_rate}
+                            print(message)
                             start = time.monotonic()
-                            response = requests.post(JSON_POST_URL, json=json_data)
-                            json_resp = response.content
+                            device.send_telemetry(json.dumps(message))
+                            device.loop()
+                            #response = requests.post(JSON_POST_URL, json=json_data)
+                            #json_resp = response.content
                             print(time.monotonic()- start)
                             #print(json_resp)
                             print("-" * 40)

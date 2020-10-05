@@ -1,0 +1,54 @@
+{
+  "@id": "urn:hussnainAhmed:berrymedB100xDevTemplate_6x8:1",
+  "@type": "CapabilityModel",
+  "implements": [
+    {
+      "@id": "urn:hussnainAhmed:berrymedB100xDevTemplate_6x8:cairb_uqz:1",
+      "@type": "InterfaceInstance",
+      "displayName": {
+        "en": "Interface"
+      },
+      "name": "berrymedB100xDevTemplate_58j",
+      "schema": {
+        "@id": "urn:hussnainAhmed:berrymedB100xDevTemplate_58j:1",
+        "@type": "Interface",
+        "displayName": {
+          "en": "Interface"
+        },
+        "contents": [
+          {
+            "@id": "urn:hussnainAhmed:berrymedB100xDevTemplate_58j:spo2:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "spo2"
+            },
+            "name": "spo2",
+            "displayUnit": {
+              "en": "%"
+            },
+            "schema": "integer",
+            "unit": "percent"
+          },
+          {
+            "@id": "urn:hussnainAhmed:berrymedB100xDevTemplate_58j:pulse_rate:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "pulse_rate"
+            },
+            "name": "pulse_rate",
+            "displayUnit": {
+              "en": "bpm"
+            },
+            "schema": "integer"
+          }
+        ]
+      }
+    }
+  ],
+  "displayName": {
+    "en": "berrymed-b100x-dev-template"
+  },
+  "@context": [
+    "http://azureiot.com/v1/contexts/IoTModel.json"
+  ]
+}
