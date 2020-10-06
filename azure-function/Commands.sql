@@ -30,3 +30,4 @@ INSERT INTO devices(id, type, rented_to, rented_at ) VALUES ('rpm-pbi-dev-5','PM
 
 
 SELECT * FROM create_hypertable('rpmc', 'recorded_at',chunk_time_interval => INTERVAL '1 week');
+SELECT * FROM create_hypertable('rpmnc', 'recorded_at',chunk_time_interval => INTERVAL '1 month');

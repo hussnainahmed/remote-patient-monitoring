@@ -45,7 +45,9 @@ CREATE TABLE "rpm_cont_data" (
 	"oxygen_saturation" smallint,
 	"heart_rate" smallint,
 	"respiratory_rate" smallint,
-	"mews" smallint
+	"mews" smallint,
+	FOREIGN KEY (device_id) REFERENCES devices_meta (device_id),
+	FOREIGN KEY (rented_to_uid) REFERENCES users_meta (user_id)
 );
 
 
@@ -56,7 +58,9 @@ CREATE TABLE "rpm_non_cont_data" (
 	"rented_to_uid" VARCHAR NOT NULL,
 	"rented_to_name" VARCHAR NOT NULL,
 	"bp_systolic" smallint,
-	"bp_diastolic" smallint
+	"bp_diastolic" smallint,
+	FOREIGN KEY (device_id) REFERENCES devices_meta (device_id),
+	FOREIGN KEY (rented_to_uid) REFERENCES users_meta (user_id)
 );
 
 SELECT * FROM create_hypertable('rpm_cont_data', 'recorded_at',chunk_time_interval => INTERVAL '1 week');
@@ -91,3 +95,6 @@ INSERT INTO devices(id, type, rented_to, rented_at ) VALUES ('rpm-pbi-dev-4','PM
 INSERT INTO devices(id, type, rented_to, rented_at ) VALUES ('rpm-pbi-dev-5','PM6100','Wasim','2020-09-28 18:46:28');
 
 
+UPDATE device_rentals SET is_returned = '1' , returned_at = '2020-10-02 10:46:32' WHERE rented_to_uid = '100002';
+INSERT INTO device_rentals (device_id, rented_at, rented_to_uid, rented_to_name ) VALUES ('rpm-pbi-dev-2','2020-10-06 00:35:28','100005','Farhan Ali');
+INSERT INTO device_rentals (device_id, rented_at, rented_to_uid, rented_to_name ) VALUES ('rpm-pbi-dev-5','2020-10-06 00:35:28','100004','Shahid Hameed');
