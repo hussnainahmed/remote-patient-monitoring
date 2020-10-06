@@ -36,16 +36,14 @@ CREATE TABLE "device_rentals" (
 
 
 
-CREATE TABLE "rpm_cont_data" (
+CREATE TABLE "rpm_data" (
 	"recorded_at" TIMESTAMP NOT NULL,
 	"device_id" VARCHAR NOT NULL,
 	"rented_to_uid" VARCHAR NOT NULL,
 	"rented_to_name" VARCHAR NOT NULL,
-	"temperature" DECIMAL(2) NOT NULL,
-	"oxygen_saturation" smallint,
-	"heart_rate" smallint,
-	"respiratory_rate" smallint,
-	"mews" smallint,
+	"vital_type" VARCHAR NOT NULL,
+	"vital_value" NUMERIC,
+	PRIMARY KEY(recorded_at, device_id,vital_type),
 	FOREIGN KEY (device_id) REFERENCES devices_meta (device_id),
 	FOREIGN KEY (rented_to_uid) REFERENCES users_meta (user_id)
 );
@@ -62,6 +60,8 @@ CREATE TABLE "rpm_non_cont_data" (
 	FOREIGN KEY (device_id) REFERENCES devices_meta (device_id),
 	FOREIGN KEY (rented_to_uid) REFERENCES users_meta (user_id)
 );
+
+SELECT * FROM create_hypertable('rpm_data', 'recorded_at',chunk_time_interval => INTERVAL '1 week');
 
 SELECT * FROM create_hypertable('rpm_cont_data', 'recorded_at',chunk_time_interval => INTERVAL '1 week');
 SELECT * FROM create_hypertable('rpm_non_cont_data', 'recorded_at',chunk_time_interval => INTERVAL '1 month');
@@ -98,3 +98,6 @@ INSERT INTO devices(id, type, rented_to, rented_at ) VALUES ('rpm-pbi-dev-5','PM
 UPDATE device_rentals SET is_returned = '1' , returned_at = '2020-10-02 10:46:32' WHERE rented_to_uid = '100002';
 INSERT INTO device_rentals (device_id, rented_at, rented_to_uid, rented_to_name ) VALUES ('rpm-pbi-dev-2','2020-10-06 00:35:28','100005','Farhan Ali');
 INSERT INTO device_rentals (device_id, rented_at, rented_to_uid, rented_to_name ) VALUES ('rpm-pbi-dev-5','2020-10-06 00:35:28','100004','Shahid Hameed');
+
+
+select * from device_rentals where is_returned = FALSE order by rented_at desc limit 10
