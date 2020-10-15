@@ -1,7 +1,9 @@
-import datetime 
+import datetime
+import logging
+import azure.functions as func
 import psycopg2
 import json
-import datetime 
+
 import time
 
 CONNECTION = "dbname=shifarpm user=rpmadmin@rpmdb password=SHEC9pers2fas@spom host=rpmdb.postgres.database.azure.com port=5432 sslmode=require"
@@ -18,7 +20,7 @@ def get_device_list(con):
         for row in rental_active_users:
             active_user_list.append(row[0])
     except (Exception, psycopg2.Error) as error:
-        print("Error fetching data from PostgreSQL table", error)
+        logging.error("Error fetching data from PostgreSQL table ," + error)
 
     finally:
         cursor.close()
@@ -40,7 +42,7 @@ def get_user_info(con,dev_id):
             user_name = "null"
 
     except (Exception, psycopg2.Error) as error:
-        print("Error fetching data from PostgreSQL table", error)
+        logging.error("Error fetching data from PostgreSQL table, " + error)
 
     finally:
         cursor.close()
@@ -67,7 +69,7 @@ def get_user_latest_vitals(con,dev_id):
 
 
     except (Exception, psycopg2.Error) as error:
-        print("Error fetching data from PostgreSQL table", error)
+        logging.error("Error fetching data from PostgreSQL table, " + error)
 
     finally:
         cursor.close()
@@ -92,9 +94,8 @@ def get_mew_score(temperature,respiratory_rate,heart_rate,oxygen_saturation,bp_s
         else:
              temp_score = 0
         mews += temp_score
-        #print("temp mews: " + str(temp_score))
     except Exception as e:
-        print(str(e) + "fuck off")
+        logging.error(str(e))
     
     try:
         if bp_systolic <= 70:
@@ -108,9 +109,8 @@ def get_mew_score(temperature,respiratory_rate,heart_rate,oxygen_saturation,bp_s
         else:
              systolic_score = 0
         mews += systolic_score
-        #print("systolic_score: " + str(systolic_score))
     except Exception as e:
-        print(str(e) + "fuck off")
+        logging.error(str(e))
     
     try:
         if heart_rate <= 40:
@@ -126,9 +126,8 @@ def get_mew_score(temperature,respiratory_rate,heart_rate,oxygen_saturation,bp_s
         else:
              hr_score = 0
         mews += hr_score
-        #print("hr_score: " + str(hr_score))
     except Exception as e:
-        print(str(e) + "fuck off")
+        logging.error(str(e))
 
     try:
         if respiratory_rate < 9:
@@ -142,9 +141,8 @@ def get_mew_score(temperature,respiratory_rate,heart_rate,oxygen_saturation,bp_s
         else:
              resprate_score = 0
         mews += resprate_score
-        #print("resprate_score: " + str(resprate_score))
     except Exception as e:
-        print(str(e) + "fuck off")
+        logging.error(str(e))
 
     try:
         if consciousness == 2:
@@ -156,9 +154,8 @@ def get_mew_score(temperature,respiratory_rate,heart_rate,oxygen_saturation,bp_s
         else:
             cons_score = 0
         mews += cons_score
-        #print("cons_score: " + str(cons_score))
     except Exception as e:
-        print(str(e) + "fuck off")
+        logging.error(str(e))
 
     try:
         if oxygen_saturation >= 96:
@@ -170,19 +167,13 @@ def get_mew_score(temperature,respiratory_rate,heart_rate,oxygen_saturation,bp_s
         elif oxygen_saturation <= 91:
             oxy_score = 3
         mews += oxy_score
-        #print("oxy_score: " + str(oxy_score))
     except Exception as e:
-        print(str(e) + "fuck off")
+        logging.error(str(e))
 
     return mews
 
-    
 
-
-
-
-def main():
-    print("Hello World!")
+def main(mytimer: func.TimerRequest) -> None:
     con = psycopg2.connect(CONNECTION)
     cur = con.cursor()
     SQL = "INSERT INTO rpm_data (recorded_at, device_id, rented_to_uid, rented_to_name,vital_type, vital_value) VALUES (%s, %s, %s, %s, %s, %s);"
@@ -197,13 +188,10 @@ def main():
             #print(dev_id + "," + str(get_user_latest_vitals(con,dev_id)))
             data = (recorded_at, dev_id, user_id ,user_name,key,float(score))
             cur.execute(SQL, data)
-            print(data)
-        except Exception as e:
+            logging.info(data)
+        except:
             pass
     
     con.commit()
     cur.close()
     con.close()
-
-if __name__ == "__main__":
-    main()

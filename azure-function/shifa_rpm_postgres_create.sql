@@ -75,6 +75,9 @@ INSERT INTO devices_meta(device_id, device_name, vendor,created_at, is_device_in
 UPDATE devices_meta SET created_at_hub = NULL WHERE device_id = 'rpm-pbi-dev-3';
 
 
+INSERT INTO devices_meta(device_id, device_name, vendor,created_at, is_device_in_hub,  created_at_hub ) VALUES ('rpm-dev-1','PM6100','BerryMed','2020-09-28 18:46:28','1','2020-09-28 18:46:28');
+
+
 INSERT INTO users_meta(user_id, user_name, address, dob, created_at ) VALUES ('100001','Hussnain Ahmed','H8/4 Islamabad','1982-04-04','2020-09-28 18:46:28');
 INSERT INTO users_meta(user_id, user_name, address, dob, created_at ) VALUES ('100002','Ali Ahmed','H8/4 Islamabad','1982-04-04','2020-09-28 18:46:28');
 INSERT INTO users_meta(user_id, user_name, address, dob, created_at ) VALUES ('100003','Shehnaz Akhter','I8/3 Islamabad','1965-07-05','2020-09-28 18:46:28');
@@ -82,12 +85,15 @@ INSERT INTO users_meta(user_id, user_name, address, dob, created_at ) VALUES ('1
 INSERT INTO users_meta(user_id, user_name, address, dob, created_at ) VALUES ('100005','Farhan Ali','H8/3 Islamabad','1976-05-03','2020-09-28 18:46:28');
 INSERT INTO users_meta(user_id, user_name, address, dob, created_at ) VALUES ('100006','Shazia Khan','H8/2 Islamabad','2001-03-04','2020-09-28 18:46:28');
 
+INSERT INTO users_meta(user_id, user_name, address, dob, created_at ) VALUES ('100007','Ahmed Ali','H8/4 Islamabad','1982-04-04','2020-09-28 18:46:28');
 
 
 
 INSERT INTO device_rentals (device_id, rented_at, rented_to_uid, rented_to_name ) VALUES ('rpm-pbi-dev-1','2020-09-28 18:46:28','100001','Hussnain Ahmed');
 INSERT INTO device_rentals (device_id, rented_at, rented_to_uid, rented_to_name ) VALUES ('rpm-pbi-dev-2','2020-09-28 18:46:28','100002','Ali Ahmed');
 INSERT INTO device_rentals (device_id, rented_at, rented_to_uid, rented_to_name ) VALUES ('rpm-pbi-dev-3','2020-09-28 18:46:28','100003','Shehnaz Akhter');
+
+INSERT INTO device_rentals (device_id, rented_at, rented_to_uid, rented_to_name ) VALUES ('rpm-dev-1','2020-09-28 18:46:28','100007','Ahmed Ali');
 
 
 

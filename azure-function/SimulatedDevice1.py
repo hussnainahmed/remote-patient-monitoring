@@ -19,7 +19,7 @@ CONNECTION_STRING = "HostName=rpm-pbi-iothub.azure-devices.net;DeviceId=rpm-pbi-
 TEMPERATURE = 20.0
 HUMIDITY = 60
 #MSG_TXT = '{{"recorded_at": {recorded_at},"device_id": {device_id},"temperature": {temperature},"oxygen_saturation": {oxygen_saturation}, "heart_rate": {heart_rate},"bp_systolic": {bp_systolic},"bp_diastolic": {bp_diastolic}}}'
-MSG_TXT_CONT = '{{"recorded_at": {recorded_at},"temperature": {temperature},"oxygen_saturation": {oxygen_saturation}, "heart_rate": {heart_rate},"respiratory_rate": {respiratory_rate}}}'
+MSG_TXT_CONT = '{{"recorded_at": {recorded_at},"temperature": {temperature},"oxygen_saturation": {oxygen_saturation}, "heart_rate": {heart_rate},"respiratory_rate": {respiratory_rate}, "consciousness": {consciousness}}}'
 MSG_TXT_NON_CONT = '{{"recorded_at": {recorded_at},"bp_systolic": {bp_systolic},"bp_diastolic": {bp_diastolic}}}'
 
 
@@ -39,26 +39,27 @@ def iothub_client_telemetry_sample_run():
             #dateTimeObj = datetime.now()
             #timestampStr = dateTimeObj.strftime("%Y-%m-%dT%H:%M:%S")
             temperature = uniform(36, 37)
-            oxygen_saturation = randint(95, 99)
+            oxygen_saturation = randint(97, 99)
             heart_rate = randint(90, 150)
             bp_systolic = randint(110, 120)
             bp_diastolic = randint(70, 80)
-            respiratory_rate =  randint(11, 21)
+            respiratory_rate =  randint(11, 19)
             #humidity = HUMIDITY + (random.random() * 20)
             if int(time.time()) % 300 > 8:
                 msg_txt_formatted_cont = MSG_TXT_CONT.format(
-                    recorded_at = time.time(),
+                    recorded_at = int(time.time())*1000,
                     temperature=temperature, 
                     oxygen_saturation = oxygen_saturation,
                     heart_rate = heart_rate,
-                    respiratory_rate = respiratory_rate 
+                    respiratory_rate = respiratory_rate ,
+                    consciousness = 1
                     #bp_systolic = bp_systolic,
                     #bp_diastolic = bp_diastolic
                     )
                 message = Message(msg_txt_formatted_cont)
             else:
                 msg_txt_formatted_non_cont = MSG_TXT_NON_CONT.format(
-                    recorded_at = time.time(),
+                    recorded_at = int(time.time())*1000,
                     bp_systolic = bp_systolic,
                     bp_diastolic = bp_diastolic
                     )
